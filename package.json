@@ -1,0 +1,55 @@
+{
+  "name": "barrundan-api",
+  "version": "1.0.0",
+  "description": "Powering Beer Drinking Dreams Since 1863",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm run -s build",
+    "start": "node dist/index.js",
+    "dev":
+      "nodemon src/index.js --exec \"node -r dotenv/config -r babel-register\"",
+    "clean": "rimraf dist",
+    "build": "npm run clean && mkdir dist && babel src -s -D -d dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://spixooze@github.com/spixooze/Barrundan-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spixooze/Barrundan-API/issues"
+  },
+  "homepage": "https://github.com/spixooze/Barrundan-API#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "morgan": "^1.8.2",
+    "rimraf": "^2.6.2"
+  },
+  "devDependencies": {
+    "babel-register": "^6.26.0",
+    "dotenv": "^4.0.0",
+    "nodemon": "^1.12.1"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "plugins": ["transform-object-rest-spread"]
+  }
+}
