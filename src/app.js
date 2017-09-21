@@ -1,7 +1,7 @@
 import express from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
-import routes from './routes'
+import routes from '../routes/routes'
 
 const app = express()
 app.use((req, res, next) => {
