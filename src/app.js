@@ -2,17 +2,15 @@ import express from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
-const db = require('../config/db')
-require('./models/index')
+import db from '../config/db'
 import routes from './routes/routes'
 
-const MONGO_URI = db.url
 const app = express()
 
 // Mongoose's built in promise library is deprecated, replace it with ES2015 Promise
 mongoose.Promise = global.Promise
 
-mongoose.connect(MONGO_URI)
+mongoose.connect(db.url)
 
 mongoose.connection
   .once('open', () => console.log('Connected to MongoLab instance.'))

@@ -1,11 +1,11 @@
-const routes = app => {
-  const todoList = require('../controllers/todoListController')
+import { listAllUsers, createUser } from '../controllers/users_controller'
 
+const routes = app => {
   // todoList Routes
   app
-    .route('/tasks')
-    .get(todoList.listAllTasks)
-    .post(todoList.createTask)
+    .route('/user')
+    .get(listAllUsers)
+    .post(createUser)
 }
 
 export default routes
