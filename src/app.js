@@ -2,7 +2,7 @@ import express from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
-import db from '../config/db'
+import db from './config/db'
 import routes from './routes/routes'
 
 const app = express()
