@@ -1,14 +1,18 @@
 export default bars => {
-  let selectCount = 4,
+  let nbrOfBarsWanted = 4,
     numberOfBars = bars.length,
-    generatedBars = new Array(selectCount),
-    selectedBars = new Array(numberOfBars)
+    randomBars = new Array(nbrOfBarsWanted)
 
-  while (selectCount--) {
-    const bar = Math.floor(Math.random() * bars.length)
-    generatedBars[selectCount] =
-      bars[bar in selectedBars ? selectedBars[bar] : bar]
-    selectedBars[bar] = --numberOfBars
+  while (nbrOfBarsWanted--) {
+    const appendBar = () => {
+      const x = Math.floor(Math.random() * bars.length)
+      if (randomBars.includes(bars[x])) {
+        return appendBar()
+      } else {
+        return bars[x]
+      }
+    }
+    randomBars[nbrOfBarsWanted] = appendBar()
   }
-  return generatedBars
+  return randomBars
 }
