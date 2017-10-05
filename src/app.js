@@ -32,18 +32,24 @@ app.use(bodyParser.json())
 // Routes
 routes(app)
 
+/*app.use((err, req, res, next) => {
+
+    console.log(err.response.status);
+   next(err);
+});*/
 // 404 => Error handler
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   const err = new Error('These are not the droids you are looking for')
   err.status = 404
   next(err)
-})
+}) */
 
 // Error handler
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).send({
-    error: err.status,
-    message: err.message
+app.use((err, req, res) => {
+  console.log("error");
+  res.status(err.response.status).send({
+    error: err.response.status,
+    message: err.response.message
   })
 })
 // CORS setup?
@@ -51,7 +57,7 @@ app.use((err, req, res, next) => {
 //   res.header('Access-Control-Allow-Origin', '*')
 //   res.header(
 //     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept'
+//     'Origin, X-Requested-With, Content-Type, Accept'>
 //   )
 //   if (req.method === 'Options') {
 //     res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE')

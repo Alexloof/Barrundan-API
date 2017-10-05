@@ -9,7 +9,7 @@ const routes = app => {
   app
     .route('/user')
     .get(listAllUsers)
-    .post(createUser)
+    .post(asyncMiddleware(createUser))
 
   // Barrunda routes
   app
