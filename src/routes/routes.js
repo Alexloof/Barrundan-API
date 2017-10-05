@@ -5,7 +5,7 @@ import { sendBarrunda, setBarrunda } from '../controllers/barrunda_controller'
 import asyncMiddleware from '../helpers/asyncMiddleware'
 
 const routes = app => {
-  // todoList Routes
+  // User Routes
   app
     .route('/user')
     .get(listAllUsers)
