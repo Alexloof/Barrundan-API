@@ -5,7 +5,8 @@ import Barrunda from '../models/barrunda'
 
 // temp hårdkodad till Malmö
 export const sendBarrunda = async (req, res, next) => {
-  Barrunda.findOne({ city: 'MALMÖ' }).then(runda => res.send(runda))
+  const runda = await Barrunda.findOne({ city: 'MALMÖ' })
+  res.send(runda)
 }
 
 // OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB

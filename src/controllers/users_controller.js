@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
 import axios from 'axios'
 
+import { returnWithToken } from '../config/jwt'
 import User from '../models/user'
 
 const facebookUrl =
-  'https://graph.facebook.com/me?fields=id,name,picture&access_token='
+  'https://graph.facebook.com/me?fields=id,first_name,picture&access_token='
 
 export const listAllUsers = (req, res) => {
   User.find({}, (err, user) => {
@@ -16,29 +17,28 @@ export const listAllUsers = (req, res) => {
 // Facebook token.
 export const createUser = async (req, res, next) => {
   //Todo Validera request
-
-  // kalla på facebook api.
+  // kallar på facebook api.
   const token = req.body.token
+  const result = await axios.get(`${facebookUrl}${token}`).catch(e => {
+    next({ message: e.response.data.error.message, status: e.response.status })
+  })
 
-  // Todo kolla upp hur man gör med
-  const result = await axios.get(`${facebookUrl}${token}`);
+  const { id, first_name, picture } = result.data
 
-  return result;
-  //console.log(result)
+  const findUser = await User.findOne({ facebookId: id })
+  if (findUser) {
+    res.send(returnWithToken(findUser._id))
+  }
 
-  //res.send('')
-  //const newUser = new User(req.body)
+  const user = new User()
+  user.facebookId = id
+  user.name = first_name
+  user.imgUrl = picture.data.url
 
-  /*
-    newUser.save((err, user) => {
-      if (err) {
-        switch (err.code) {
-          case 11000:
-            return res.send({ message: 'Email adressen är upptagen!' })
-          default:
-            return res.send(err)
-        }
-      }
-      res.send(user)
-    })*/
+  user.save((err, user) => {
+    if (err) {
+        next(err)
+    }
+    res.send(returnWithToken(user._id))
+  })
 }

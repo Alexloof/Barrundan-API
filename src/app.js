@@ -1,16 +1,24 @@
-import express from 'express'
+import express, {Router} from 'express'
 import logger from 'morgan'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
-import db from './config/db'
+import passport from 'passport'
+import config from './config'
+import {jwt_strategy} from './config/jwt'
 import routes from './routes/routes'
 
 const app = express()
 
+// Add jwt stratergy
+passport.use(jwt_strategy);
+app.use(passport.initialize());
+
+const router = new Router();
+
 // Mongoose's built in promise library is deprecated, replace it with ES2015 Promise
 mongoose.Promise = global.Promise
 
-mongoose.connect(db.url)
+mongoose.connect(config.db_url)
 
 mongoose.connection
   .once('open', () => console.log('Connected to MongoLab instance.'))
@@ -30,28 +38,24 @@ app.use(
 app.use(bodyParser.json())
 
 // Routes
-routes(app)
+routes(router)
 
-/*app.use((err, req, res, next) => {
+app.use(router);
 
-    console.log(err.response.status);
-   next(err);
-});*/
-// 404 => Error handler
-/*app.use((req, res, next) => {
-  const err = new Error('These are not the droids you are looking for')
-  err.status = 404
-  next(err)
-}) */
 
-// Error handler
-app.use((err, req, res) => {
-  console.log("error");
-  res.status(err.response.status).send({
-    error: err.response.status,
-    message: err.response.message
-  })
+app.use((err, req, res, next) => {
+    /* Handle Errors */
+    res.status(err.status).send({
+        error: err.status,
+        message: err.message
+    });
+
+});
+
+app.use(function (req, res, next) {
+    res.status(404).send('These are not the droids you are looking for')
 })
+
 // CORS setup?
 // app.use((req, res, next) => {
 //   res.header('Access-Control-Allow-Origin', '*')
