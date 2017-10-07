@@ -1,10 +1,27 @@
+// FIRST AND LAST BAR (om vi anväder google directions)
+function firstAndLastBar(bars) {
+  let barsWithDistances = addDistances(bars)
+
+  let barsFarAway = []
+  barsWithDistances.map(bar => {
+    const barToInclude = bar.distanceToBars.filter(
+      b => b.distance === findDistance(barsWithDistances, 'max')
+    )[0]
+    if (barToInclude) {
+      barsFarAway.push(barToInclude)
+    }
+  })
+
+  return barsFarAway
+}
+
 // SJÄLVA SORT FUNKTIONEN!! INGEN TRAVELING SALESMAN.. blublublub
 // Tar barerna som är längst ifrån varandra. Väljer en av dem som startpunkt
 // Tar nästkommande bar som är närmst
 // OBS - Ja det är inte optimalt.. det är ingen TSP...
 // ... det är tight kopplat etc... :)
 function sortByDistance(bars) {
-  let nrOfBars = bars.length
+  //let nrOfBars = bars.length
   let barsSorted = []
 
   let barsWithDistances = addDistances(bars)
@@ -125,7 +142,13 @@ const barList = [
 ]
 
 // testa möget...
-//const sortedBarsTEst = sortByDistance(barList)
-//sortedBarsTEst.map(item => console.log(item))
+// const sortedBarsTEst = sortByDistance(barList)
+// sortedBarsTEst.map(item => console.log(item))
+// console.log('\n\n***************')
+// console.log(sortedBarsTEst)
+
+// Testa barsFarAway
+const barsAppart = firstAndLastBar(barList)
+console.log(barsAppart)
 
 //export default sortByDistance
