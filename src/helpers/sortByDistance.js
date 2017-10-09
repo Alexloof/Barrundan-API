@@ -1,5 +1,5 @@
 // FIRST AND LAST BAR (om vi anväder google directions)
-function firstAndLastBar(bars) {
+export const firstAndLastBar = (bars) => {
   let barsWithDistances = addDistances(bars)
 
   let barsFarAway = []
@@ -8,7 +8,7 @@ function firstAndLastBar(bars) {
       b => b.distance === findDistance(barsWithDistances, 'max')
     )[0]
     if (barToInclude) {
-      barsFarAway.push(barToInclude)
+      barsFarAway.push(bar)
     }
   })
 
@@ -121,34 +121,3 @@ function getClosestBar(bar, sortingList) {
   )[0]
 }
 
-// Mock av barlista för test
-const barList = [
-  {
-    name: 'Bishops Arms',
-    location: { lat: 55.603208, lng: 12.9994935 }
-  },
-  {
-    name: 'Sky Bar',
-    location: { lat: 55.6077566, lng: 12.9941654 }
-  },
-  {
-    name: 'Mello Yello',
-    location: { lat: 55.6054896, lng: 12.998925 }
-  },
-  {
-    name: 'Olearys',
-    location: { lat: 55.6089539, lng: 12.9995112 }
-  }
-]
-
-// testa möget...
-// const sortedBarsTEst = sortByDistance(barList)
-// sortedBarsTEst.map(item => console.log(item))
-// console.log('\n\n***************')
-// console.log(sortedBarsTEst)
-
-// Testa barsFarAway
-const barsAppart = firstAndLastBar(barList)
-console.log(barsAppart)
-
-//export default sortByDistance

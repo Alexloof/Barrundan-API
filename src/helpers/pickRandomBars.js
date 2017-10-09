@@ -1,9 +1,7 @@
-export default bars => {
-  let nbrOfBarsWanted = 4,
-    numberOfBars = bars.length,
-    randomBars = new Array(nbrOfBarsWanted)
+export default (bars, numberOfBarsWanted) => {
+  let randomBars = new Array(numberOfBarsWanted)
 
-  while (nbrOfBarsWanted--) {
+  while (numberOfBarsWanted--) {
     const appendBar = () => {
       const x = Math.floor(Math.random() * bars.length)
       if (randomBars.includes(bars[x])) {
@@ -12,7 +10,7 @@ export default bars => {
         return bars[x]
       }
     }
-    randomBars[nbrOfBarsWanted] = appendBar()
+    randomBars[numberOfBarsWanted] = appendBar()
   }
   return randomBars
 }
