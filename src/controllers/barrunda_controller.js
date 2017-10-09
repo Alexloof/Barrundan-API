@@ -1,12 +1,18 @@
 import mongoose from 'mongoose'
-import fetchBars from '../helpers/google_places'
+import fetchBars from '../helpers/googlePlaces'
 import pickRandomBars from '../helpers/pickRandomBars'
 import Barrunda from '../models/barrunda'
 
+import { createAll } from '../helpers/createBarRound'
 // temp hårdkodad till Malmö
 export const sendBarrunda = async (req, res, next) => {
   const runda = await Barrunda.findOne({ city: 'MALMÖ' })
   res.send(runda)
+}
+
+export const TEEEEESTTAAA = async (req, res, next) => {
+  await createAll()
+  res.send({ dinmamma: 'okej' })
 }
 
 // OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB
