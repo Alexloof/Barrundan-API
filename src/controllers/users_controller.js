@@ -38,7 +38,8 @@ export const createUser = async (req, res, next) => {
   user.save((err, user) => {
     if (err) {
       next(err)
+    } else {
+      res.send(returnWithToken(user._id))
     }
-    res.send(returnWithToken(user._id))
   })
 }
