@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
   facebookId: {
-    unique:true,
+    unique: true,
     type: String,
     required: true
   },
