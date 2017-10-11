@@ -19,8 +19,12 @@ export const createUser = async (req, res, next) => {
   //Todo Validera request
   // kallar på facebook api.
   const token = req.body.token
+  console.log(token)
   const result = await axios.get(`${facebookUrl}${token}`).catch(e => {
-    next({ message: e.response.data.error.message, status: e.response.status })
+    return next({
+      message: e.response.data.error.message,
+      status: e.response.status
+    })
   })
 
   const { id, first_name, picture } = result.data
@@ -29,7 +33,6 @@ export const createUser = async (req, res, next) => {
   if (findUser) {
     return res.send(returnWithToken(findUser._id))
   }
-
   const user = new User()
   user.facebookId = id
   user.name = first_name
@@ -37,7 +40,7 @@ export const createUser = async (req, res, next) => {
 
   user.save((err, user) => {
     if (err) {
-      next(err)
+      return next(err)
     } else {
       res.send(returnWithToken(user._id))
     }
