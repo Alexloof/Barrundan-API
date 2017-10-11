@@ -19,14 +19,15 @@ export const createUser = async (req, res, next) => {
   //Todo Validera request
   // kallar på facebook api.
   const token = req.body.token
-  console.log(token)
-  const result = await axios.get(`${facebookUrl}${token}`).catch(e => {
+  let result
+  try {
+    result = await axios.get(`${facebookUrl}${token}`)
+  } catch (e) {
     return next({
       message: e.response.data.error.message,
-      status: e.response.status
+      code: e.response.status
     })
-  })
-
+  }
   const { id, first_name, picture } = result.data
 
   const findUser = await User.findOne({ facebookId: id })
