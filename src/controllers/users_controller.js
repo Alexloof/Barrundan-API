@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 import axios from 'axios'
+import { error } from '../models/error'
+import Joi from 'joi'
 
 import { returnWithToken } from '../config/jwt'
 import User from '../models/user'
@@ -22,18 +24,19 @@ export const listAllUsers = async (req, res) => {
 }
 
 // Facebook token.
+export const createUserReqeustSchema = Joi.object({
+    token:Joi.string().required()
+})
 export const createUser = async (req, res, next) => {
   //Todo Validera request
   // kallar på facebook api.
+    console.log("fasölfkalösfklöasflkaslkö")
   const token = req.body.token
   let result
   try {
     result = await axios.get(`${facebookUrl}${token}`)
   } catch (e) {
-    return next({
-      message: e.response.data.error.message,
-      code: e.response.status
-    })
+    return next(error(e.response.status, e.response.data.error.message))
   }
   const { id, first_name, picture } = result.data
 
@@ -41,16 +44,15 @@ export const createUser = async (req, res, next) => {
   if (findUser) {
     return res.send(returnWithToken(findUser._id))
   }
-  const user = new User()
-  user.facebookId = id
-  user.name = first_name
-  user.imgUrl = picture.data.url
 
-  user.save((err, user) => {
-    if (err) {
-      return next(err)
-    } else {
-      res.send(returnWithToken(user._id))
-    }
-  })
+  try {
+    const user = await User.create({
+      facebookId: id,
+      name: first_name,
+      imgUrl: picture.data.url
+    })
+    res.send(returnWithToken(user._id))
+  } catch (e) {
+    return next(err)
+  }
 }

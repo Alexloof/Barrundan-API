@@ -50,7 +50,7 @@ app.use(router)
 app.use((err, req, res, next) => {
   console.log(err.message);
   res.status(err.code >= 100 && err.code < 600 ? err.code : 500).send({
-    error: err.code,
+    error: err.code >= 100 && err.code < 600 ? err.code : 500,
     message: err.message
   })
 })

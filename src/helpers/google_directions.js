@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { google_places_key as apiKey } from '../API/api_keys'
+import { GOOGLE_PLACE_KEY as apiKey } from '../config/settings'
 
 const directionsUrl = 'https://maps.googleapis.com/maps/api/directions/json?'
 

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema
-import validator from 'validator'
 
 const barSchema = new Schema({
   location: {

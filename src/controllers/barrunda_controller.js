@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import fetchBars from '../helpers/googlePlaces'
 import pickRandomBars from '../helpers/pickRandomBars'
 import Barrunda from '../models/barrunda'
+import {error} from '../models/error'
 
 import { createAll } from '../helpers/createBarRound'
 // temp hårdkodad till Malmö
@@ -21,7 +22,7 @@ export const createBarrunda = async (req, res, next) => {
 
 export const addUserToBarrunda = async (req, res, next) => {
   if (!req.body.userId) {
-    return res.status(400).send({ error: 'Must provide a userId' })
+    return next(error(400, 'Must provide a userId'))
   }
   const userId = req.body.userId
 

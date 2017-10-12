@@ -1,11 +1,12 @@
-import { listAllUsers, createUser } from '../controllers/users_controller'
+import passport from 'passport'
+import {validator} from '../helpers/requestValidator'
+import { listAllUsers, createUser, createUserReqeustSchema } from '../controllers/users_controller'
 import {
   fetchBarrunda,
   addUserToBarrunda,
   fetchBarrundaParticipants,
   createBarrunda
 } from '../controllers/barrunda_controller'
-import passport from 'passport'
 
 /* Använd asyncMiddleware om controllern är async */
 import asyncMiddleware from '../helpers/asyncMiddleware'
@@ -15,7 +16,7 @@ const routes = router => {
   // add header in request Authorization: Bearer <token>
 
   // User Routes
-  router.post('/users', asyncMiddleware(createUser))
+  router.post('/users', validator(createUserReqeustSchema), asyncMiddleware(createUser))
 
   router.get(
     '/users',
