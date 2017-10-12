@@ -42,7 +42,7 @@ export const createUser = async (req, res, next) => {
 
   const findUser = await User.findOne({ facebookId: id })
   if (findUser) {
-    return res.send(returnWithToken(findUser._id))
+    return res.send(returnWithToken(findUser))
   }
 
   try {
@@ -51,7 +51,7 @@ export const createUser = async (req, res, next) => {
       name: first_name,
       imgUrl: picture.data.url
     })
-    res.send(returnWithToken(user._id))
+    res.send(returnWithToken(user))
   } catch (e) {
     return next(err)
   }

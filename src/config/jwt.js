@@ -23,8 +23,8 @@ export const jwt_strategy = new JwtStrategy(
   }
 )
 
-export const returnWithToken = id => {
-  const payload = { id }
+export const returnWithToken = user => {
+  const payload = { id:user._id }
   const token = jwt.sign(payload, config.jwt_secret)
-  return { message: 'ok', token: token }
+  return { user: user, token: token }
 }
