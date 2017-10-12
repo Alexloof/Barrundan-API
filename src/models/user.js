@@ -14,6 +14,11 @@ const UserSchema = new Schema({
   imgUrl: {
     type: String,
     required: true
+  },
+  pushTokens: {
+    type: [String],
+    required: false,
+    default: []
   }
 })
 

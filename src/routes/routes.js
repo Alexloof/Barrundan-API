@@ -1,6 +1,12 @@
 import passport from 'passport'
-import {validator} from '../helpers/requestValidator'
-import { listAllUsers, createUser, createUserReqeustSchema } from '../controllers/users_controller'
+import { validator } from '../helpers/requestValidator'
+import {
+  listAllUsers,
+  createUser,
+  createUserReqeustSchema,
+  registerForPush,
+  registerForPushReqeustSchema
+} from '../controllers/users_controller'
 import {
   fetchBarrunda,
   addUserToBarrunda,
@@ -16,12 +22,24 @@ const routes = router => {
   // add header in request Authorization: Bearer <token>
 
   // User Routes
-  router.post('/users', validator(createUserReqeustSchema), asyncMiddleware(createUser))
+  router.post(
+    '/users',
+    validator(createUserReqeustSchema),
+    asyncMiddleware(createUser)
+  )
 
   router.get(
     '/users',
     passport.authenticate('jwt', { session: false }),
     asyncMiddleware(listAllUsers)
+  )
+
+  // Register user for push
+  router.post(
+    '/user/pushtoken',
+    passport.authenticate('jwt', { session: false }),
+    validator(registerForPushReqeustSchema),
+    asyncMiddleware(registerForPush)
   )
 
   // Bar routes
