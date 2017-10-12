@@ -21,13 +21,6 @@ const barSchema = new Schema({
   }
 })
 
-const participantsSchema = new Schema({
-  userId: {
-    type: String,
-    required: true
-  }
-})
-
 const BarrundaSchema = new Schema({
   city: {
     type: String,
@@ -38,7 +31,7 @@ const BarrundaSchema = new Schema({
     required: true
   },
   participants: {
-    type: [participantsSchema],
+    type: [String],
     required: false,
     default: []
   },
