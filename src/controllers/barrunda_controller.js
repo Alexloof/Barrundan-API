@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import fetchBars from '../helpers/googlePlaces'
 import pickRandomBars from '../helpers/pickRandomBars'
 import Barrunda from '../models/barrunda'
-import {error} from '../models/error'
+import { error } from '../models/error'
 
 import { createAll } from '../helpers/createBarRound'
 // temp hårdkodad till Malmö
@@ -21,30 +21,35 @@ export const createBarrunda = async (req, res, next) => {
 }
 
 export const addUserToBarrunda = async (req, res, next) => {
-  if (!req.body.userId) {
+  if (!req.query.userId) {
     return next(error(400, 'Must provide a userId'))
   }
-  const userId = req.body.userId
+  const userId = req.query.userId
 
-  ///funkar inte!
-  Barrunda.update(
-    { _id: '59df7f2948506e299cbd57e8' },
-    { $push: { participants: userId } },
-    (err, barrunda) => {
-      if (err) {
-        console.log(err)
-        return res.send(err)
-      } else {
-        return res.send(barrunda)
+  //TODO - Micke?
+  //funkar inte optimalt - får status 200 även om man anger fel _id
+  try {
+    Barrunda.findOneAndUpdate(
+      { _id: '59df7f2d48506e299cbd57ed' },
+      { $push: { participants: userId } },
+      function(err, result) {
+        if (err) {
+          return res.send(err)
+        } else {
+          return res.send(result)
+        }
       }
-    }
-  )
+    )
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const fetchBarrundaParticipants = async (req, res, next) => {
   const runda = await Barrunda.findOne({})
   if (runda) {
     const participants = runda.participants
+    console.log(runda)
     res.send(participants)
   } else {
     return next({ error: e })
