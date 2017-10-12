@@ -7,11 +7,18 @@ import User from '../models/user'
 const facebookUrl =
   'https://graph.facebook.com/me?fields=id,first_name,picture&access_token='
 
-export const listAllUsers = (req, res) => {
-  User.find({}, (err, user) => {
-    if (err) res.send(err)
-    res.send(user)
-  })
+export const listAllUsers = async (req, res) => {
+  try {
+    User.find({}, (err, user) => {
+      if (err) {
+        return res.send(err)
+      } else {
+        return res.send(user)
+      }
+    })
+  } catch (e) {
+    return res.send({ error: e })
+  }
 }
 
 // Facebook token.

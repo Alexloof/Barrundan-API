@@ -5,14 +5,49 @@ import Barrunda from '../models/barrunda'
 
 import { createAll } from '../helpers/createBarRound'
 // temp hårdkodad till Malmö
-export const sendBarrunda = async (req, res, next) => {
-  const runda = await Barrunda.findOne({ city: 'MALMÖ' })
-  res.send(runda)
+export const fetchBarrunda = async (req, res, next) => {
+  const runda = await Barrunda.findOne({})
+  if (runda) {
+    return res.send(runda)
+  } else {
+    return res.status(400).send({ error: 'Could not find Barrunda' })
+  }
 }
 
-export const TEEEEESTTAAA = async (req, res, next) => {
+export const createBarrunda = async (req, res, next) => {
   await createAll()
   res.send({ dinmamma: 'okej' })
+}
+
+export const addUserToBarrunda = async (req, res, next) => {
+  if (!req.body.userId) {
+    return res.status(400).send({ error: 'Must provide a userId' })
+  }
+  const userId = req.body.userId
+
+  ///funkar inte!
+  Barrunda.update(
+    { _id: '59df7f2948506e299cbd57e8' },
+    { $push: { participants: userId } },
+    (err, barrunda) => {
+      if (err) {
+        console.log(err)
+        return res.send(err)
+      } else {
+        return res.send(barrunda)
+      }
+    }
+  )
+}
+
+export const fetchBarrundaParticipants = async (req, res, next) => {
+  const runda = await Barrunda.findOne({})
+  if (runda) {
+    const participants = runda.participants
+    res.send(participants)
+  } else {
+    return next({ error: e })
+  }
 }
 
 // OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB
