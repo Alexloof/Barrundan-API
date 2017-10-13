@@ -3,7 +3,9 @@ import { validator } from '../helpers/requestValidator'
 import {
   listAllUsers,
   createUser,
-  createUserReqeustSchema
+  createUserReqeustSchema,
+  registerForPush,
+  registerForPushReqeustSchema
 } from '../controllers/users_controller'
 import {
   fetchBarrunda,
@@ -32,7 +34,15 @@ const routes = router => {
     asyncMiddleware(listAllUsers)
   )
 
-  // Barrunda routes
+  // Register user for push
+  router.post(
+    '/user/pushtoken',
+    passport.authenticate('jwt', { session: false }),
+    validator(registerForPushReqeustSchema),
+    asyncMiddleware(registerForPush)
+  )
+
+  // Bar routes
 
   //för att testa göra barrundor
   router.post('/barrunda', asyncMiddleware(createBarrunda))

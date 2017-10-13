@@ -5,6 +5,7 @@ import Joi from 'joi'
 
 import { returnWithToken } from '../config/jwt'
 import User from '../models/user'
+import { savePushToken } from '../helpers/push'
 
 const facebookUrl =
   'https://graph.facebook.com/me?fields=id,first_name,picture&access_token='
@@ -28,9 +29,8 @@ export const createUserReqeustSchema = Joi.object({
   token: Joi.string().required()
 })
 export const createUser = async (req, res, next) => {
-  //Todo Validera request
-  // kallar på facebook api.
   const token = req.body.token
+  const pushToken = req.body.pushToken
   let result
   try {
     result = await axios.get(`${facebookUrl}${token}`)
@@ -53,5 +53,24 @@ export const createUser = async (req, res, next) => {
     res.send(returnWithToken(user))
   } catch (e) {
     return next(err)
+  }
+}
+
+// Push token.
+export const registerForPushReqeustSchema = Joi.object({
+  pushToken: Joi.object().required(),
+  userId: Joi.string().required()
+})
+export const registerForPush = async (req, res, next) => {
+  const userId = req.body.userId
+  const pushToken = req.body.pushToken
+  console.log(pushToken)
+  console.log(userId)
+  const findUser = await User.findOne({ _id: userId })
+  if (findUser) {
+    await savePushToken(findUser, pushToken)
+    return res.send({ status: 'Ok' })
+  } else {
+    return next(error(400, 'Not found'))
   }
 }
