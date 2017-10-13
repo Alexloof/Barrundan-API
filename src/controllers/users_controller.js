@@ -25,12 +25,11 @@ export const listAllUsers = async (req, res) => {
 
 // Facebook token.
 export const createUserReqeustSchema = Joi.object({
-    token:Joi.string().required()
+  token: Joi.string().required()
 })
 export const createUser = async (req, res, next) => {
   //Todo Validera request
   // kallar på facebook api.
-    console.log("fasölfkalösfklöasflkaslkö")
   const token = req.body.token
   let result
   try {

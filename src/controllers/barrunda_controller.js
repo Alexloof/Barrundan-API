@@ -3,15 +3,16 @@ import fetchBars from '../helpers/googlePlaces'
 import pickRandomBars from '../helpers/pickRandomBars'
 import Barrunda from '../models/barrunda'
 import { error } from '../models/error'
+import Joi from 'joi'
 
 import { createAll } from '../helpers/createBarRound'
-// temp hårdkodad till Malmö
+
 export const fetchBarrunda = async (req, res, next) => {
-  const runda = await Barrunda.findOne({})
-  if (runda) {
+  try {
+    const runda = await Barrunda.findOne({})
     return res.send(runda)
-  } else {
-    return res.status(400).send({ error: 'Could not find Barrunda' })
+  } catch (err) {
+    return next(err)
   }
 }
 
@@ -20,39 +21,29 @@ export const createBarrunda = async (req, res, next) => {
   res.send({ dinmamma: 'okej' })
 }
 
+// userId
+export const addUserToBarrundaRequestSchema = Joi.object({
+  userId: Joi.string().required()
+})
 export const addUserToBarrunda = async (req, res, next) => {
-  if (!req.query.userId) {
-    return next(error(400, 'Must provide a userId'))
-  }
-  const userId = req.query.userId
-
-  //TODO - Micke?
-  //funkar inte optimalt - får status 200 även om man anger fel _id
+  const userId = req.body.userId
   try {
-    Barrunda.findOneAndUpdate(
-      { _id: '59df7f2d48506e299cbd57ed' },
-      { $push: { participants: userId } },
-      function(err, result) {
-        if (err) {
-          return res.send(err)
-        } else {
-          return res.send(result)
-        }
-      }
+    const barrunda = await Barrunda.findOneAndUpdate(
+      {},
+      { $push: { participants: userId } }
     )
-  } catch (e) {
-    console.log(e)
+    return res.send(barrunda)
+  } catch (err) {
+    return next(err.message)
   }
 }
 
 export const fetchBarrundaParticipants = async (req, res, next) => {
-  const runda = await Barrunda.findOne({})
-  if (runda) {
-    const participants = runda.participants
-    console.log(runda)
-    res.send(participants)
-  } else {
-    return next({ error: e })
+  try {
+    const runda = await Barrunda.findOne({})
+    return res.send(runda.participants)
+  } catch (err) {
+    return next(err)
   }
 }
 
