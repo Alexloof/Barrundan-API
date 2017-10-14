@@ -20,6 +20,7 @@ export const createAll = () => {
   cities.forEach(city => {
     createBarRound(city)
   })
+  console.log('hej')
 }
 
 const createBarRound = async city => {
@@ -67,5 +68,4 @@ const createBarRound = async city => {
     }
     console.log(runda)
   })
-
 }

@@ -2,17 +2,49 @@ import mongoose from 'mongoose'
 import fetchBars from '../helpers/googlePlaces'
 import pickRandomBars from '../helpers/pickRandomBars'
 import Barrunda from '../models/barrunda'
+import { error } from '../models/error'
+import Joi from 'joi'
 
 import { createAll } from '../helpers/createBarRound'
-// temp hårdkodad till Malmö
-export const sendBarrunda = async (req, res, next) => {
-  const runda = await Barrunda.findOne({ city: 'MALMÖ' })
-  res.send(runda)
+
+export const fetchBarrunda = async (req, res, next) => {
+  try {
+    const runda = await Barrunda.findOne({})
+    return res.send(runda)
+  } catch (err) {
+    return next(err)
+  }
 }
 
-export const TEEEEESTTAAA = async (req, res, next) => {
+export const createBarrunda = async (req, res, next) => {
   await createAll()
   res.send({ dinmamma: 'okej' })
+}
+
+// userId
+export const addUserToBarrundaRequestSchema = Joi.object({
+  userId: Joi.string().required()
+})
+export const addUserToBarrunda = async (req, res, next) => {
+  const userId = req.body.userId
+  try {
+    const barrunda = await Barrunda.findOneAndUpdate(
+      {},
+      { $push: { participants: userId } }
+    )
+    return res.send(barrunda)
+  } catch (err) {
+    return next(err.message)
+  }
+}
+
+export const fetchBarrundaParticipants = async (req, res, next) => {
+  try {
+    const runda = await Barrunda.findOne({})
+    return res.send(runda.participants)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 // OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB
