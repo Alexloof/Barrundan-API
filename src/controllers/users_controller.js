@@ -58,7 +58,7 @@ export const createUser = async (req, res, next) => {
 
 // Push token.
 export const registerForPushReqeustSchema = Joi.object({
-  pushToken: Joi.object().required(),
+  pushToken: Joi.string().required(),
   userId: Joi.string().required()
 })
 export const registerForPush = async (req, res, next) => {
