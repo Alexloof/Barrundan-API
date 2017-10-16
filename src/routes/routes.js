@@ -5,7 +5,9 @@ import {
   createUser,
   createUserReqeustSchema,
   registerForPush,
-  registerForPushReqeustSchema
+  registerForPushReqeustSchema,
+  sendPushToAllUsersReqeustSchema,
+  sendPushToAllUsers
 } from '../controllers/users_controller'
 import {
   fetchBarrunda,
@@ -40,6 +42,12 @@ const routes = router => {
     passport.authenticate('jwt', { session: false }),
     validator(registerForPushReqeustSchema),
     asyncMiddleware(registerForPush)
+  )
+  // Send push to all users
+  router.post(
+    '/user/sendpush/all',
+    validator(sendPushToAllUsersReqeustSchema),
+    asyncMiddleware(sendPushToAllUsers)
   )
 
   // Bar routes

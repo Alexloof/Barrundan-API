@@ -17,10 +17,9 @@ const cities = [
 
 // ska bli krön jobb sen
 export const createAll = () => {
-  cities.forEach(city => {
-    createBarRound(city)
+  cities.forEach( async city => {
+    await createBarRound(city)
   })
-  console.log('hej')
 }
 
 const createBarRound = async city => {

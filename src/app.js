@@ -6,6 +6,8 @@ import passport from 'passport'
 import config from './config'
 import { jwt_strategy } from './config/jwt'
 import routes from './routes/routes'
+import {startCreateBarrundCronJob} from './cron/createBarrunda'
+import {createPushCronJobs} from './cron/pushJobs'
 
 const app = express()
 
@@ -61,5 +63,7 @@ app.use(function(req, res, next) {
     message: 'These are not the droids you are looking for'
   })
 })
+
+//createPushCronJobs();
 
 export default app
