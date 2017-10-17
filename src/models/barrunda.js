@@ -30,11 +30,6 @@ const BarrundaSchema = new Schema({
     type: [barSchema],
     required: true
   },
-  participants: {
-    type: [String],
-    required: false,
-    default: []
-  },
   active: {
     type: Boolean,
     default: false

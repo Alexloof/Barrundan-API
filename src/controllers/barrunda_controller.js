@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 import fetchBars from '../helpers/googlePlaces'
 import pickRandomBars from '../helpers/pickRandomBars'
 import Barrunda from '../models/barrunda'
+import Barrunda_participant from '../models/barrunda_participant'
+import User from '../models/user'
 import { error } from '../models/error'
 import Joi from 'joi'
 
@@ -21,29 +23,72 @@ export const createBarrunda = async (req, res, next) => {
   res.send({ dinmamma: 'okej' })
 }
 
-// userId
+// userId & barrundaId params
 export const addUserToBarrundaRequestSchema = Joi.object({
-  userId: Joi.string().required()
+  userId: Joi.string().required(),
+  barrundaId: Joi.string().required()
 })
 export const addUserToBarrunda = async (req, res, next) => {
   const userId = req.body.userId
+  const barrundaId = req.body.barrundaId
+
   try {
-    const barrunda = await Barrunda.findOneAndUpdate(
-      {},
-      { $push: { participants: userId } }
-    )
-    return res.send(barrunda)
+    await User.findOne({ _id: userId })
   } catch (err) {
-    return next(err.message)
+    return next(error(400, 'Finns ingen användare med detta ID'))
+  }
+  try {
+    await Barrunda.findOne({ _id: barrundaId })
+  } catch (err) {
+    return next(error(400, 'Finns ingen barrunda med detta ID'))
+  }
+  try {
+    const participant = await Barrunda_participant.findOne({
+      userId: userId,
+      barrundaId: barrundaId
+    })
+    if (participant) {
+      return next(error(400, 'Du deltar redan i barrundan'))
+    }
+  } catch (err) {
+    return next(error(500, 'Något gick snett'))
+  }
+  try {
+    const newParticipant = await Barrunda_participant.create({
+      userId: userId,
+      barrundaId: barrundaId
+    })
+    return res.send({ status: 'Ok' })
+  } catch (err) {
+    return next(error(500, 'Något gick snett med att delta i barrundan'))
   }
 }
 
 export const fetchBarrundaParticipants = async (req, res, next) => {
+  const barrundaId = req.params.barrundaId
   try {
-    const runda = await Barrunda.findOne({})
-    return res.send(runda.participants)
+    await Barrunda.findOne({ _id: barrundaId })
   } catch (err) {
-    return next(err)
+    return next(error(400, 'Det finns ingen barrunda med detta ID'))
+  }
+
+  try {
+    const participants = await Barrunda_participant.find({
+      barrundaId: barrundaId
+    })
+    const userList = participants.map(participant => participant.userId)
+
+    const newUsers = await User.find(
+      {
+        _id: { $in: userList }
+      },
+      ['imgUrl', 'name']
+    )
+    return res.send(newUsers)
+  } catch (err) {
+    return next(
+      error(500, 'Något gick fel med att hämta deltagare för angiven barrunda')
+    )
   }
 }
 
