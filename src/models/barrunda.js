@@ -18,6 +18,12 @@ const barSchema = new Schema({
   name: {
     type: String,
     required: true
+  },
+  startTime: {
+    type: Date
+  },
+  endTime: {
+    type: Date
   }
 })
 
@@ -32,7 +38,7 @@ const BarrundaSchema = new Schema({
   },
   active: {
     type: Boolean,
-    default: false
+    default: true
   },
   creation_date: {
     type: Date,

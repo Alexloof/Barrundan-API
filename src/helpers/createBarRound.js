@@ -57,9 +57,29 @@ const createBarRound = async city => {
     })
   })
 
+  // Lägg till Datum möget - Kör Kronjobb kl 20:00 på söndag?
+  const now = new Date()
+  const barRoundStartTime = now.setDate(now.getDate() + 6)
+  const barStartTimes = [
+    barRoundStartTime,
+    barRoundStartTime + 3600000,
+    barRoundStartTime + 3600000 * 2,
+    barRoundStartTime + 3600000 * 3
+  ]
+
+  let finalBarList = []
+  randomBars.map((bar, index) => {
+    finalBarList.push({
+      ...bar,
+      startTime: barStartTimes[index],
+      endTime: barStartTimes[index] + 3600000
+    })
+  })
+  // datum mög klart
+
   const newRunda = new Barrunda({
     city: city.name,
-    bars: randomBars
+    bars: finalBarList
   })
 
   newRunda.save((err, runda) => {

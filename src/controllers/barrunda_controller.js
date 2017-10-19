@@ -11,7 +11,7 @@ import { createAll } from '../helpers/createBarRound'
 
 export const fetchBarrunda = async (req, res, next) => {
   try {
-    const runda = await Barrunda.findOne({})
+    const runda = await Barrunda.findOne({ active: true })
     return res.send(runda)
   } catch (err) {
     return next(err)
