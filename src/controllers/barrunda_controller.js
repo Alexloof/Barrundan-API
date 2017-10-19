@@ -92,6 +92,7 @@ export const fetchBarrundaParticipants = async (req, res, next) => {
   }
 }
 
+// Returnerar den aktuella baren under pågående barrunda annars den första baren
 export const fetchCurrentBar = async (req, res, next) => {
   const barrundaId = req.params.barrundaId
   let barrunda
@@ -101,7 +102,12 @@ export const fetchCurrentBar = async (req, res, next) => {
     return next(error(400, 'Det finns ingen barrunda med detta ID'))
   }
 
-  // TODO - fixa så att rätt bar skickas tillbaka beroende på TID
+  const now = new Date()
+  barrunda.bars.map(bar => {
+    if (now > bar.startTime && now < bar.endTime) {
+      return res.send(bar)
+    }
+  })
   return res.send(barrunda.bars[0])
 }
 
