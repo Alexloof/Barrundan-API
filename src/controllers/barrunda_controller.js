@@ -92,6 +92,19 @@ export const fetchBarrundaParticipants = async (req, res, next) => {
   }
 }
 
+export const fetchCurrentBar = async (req, res, next) => {
+  const barrundaId = req.params.barrundaId
+  let barrunda
+  try {
+    barrunda = await Barrunda.findOne({ _id: barrundaId })
+  } catch (err) {
+    return next(error(400, 'Det finns ingen barrunda med detta ID'))
+  }
+
+  // TODO - fixa så att rätt bar skickas tillbaka beroende på TID
+  return res.send(barrunda.bars[0])
+}
+
 // OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB
 export const setBarrunda = async (req, res, next) => {
   if (!req.body.city) {
