@@ -5,7 +5,7 @@ import Joi from 'joi'
 
 import { returnWithToken } from '../config/jwt'
 import User from '../models/user'
-import { savePushToken } from '../helpers/push'
+import { savePushToken, sendPushs} from '../helpers/push'
 
 const facebookUrl =
   'https://graph.facebook.com/me?fields=id,first_name,picture&access_token='
@@ -30,7 +30,6 @@ export const createUserReqeustSchema = Joi.object({
 })
 export const createUser = async (req, res, next) => {
   const token = req.body.token
-  const pushToken = req.body.pushToken
   let result
   try {
     result = await axios.get(`${facebookUrl}${token}`)
@@ -64,13 +63,33 @@ export const registerForPushReqeustSchema = Joi.object({
 export const registerForPush = async (req, res, next) => {
   const userId = req.body.userId
   const pushToken = req.body.pushToken
-  console.log(pushToken)
-  console.log(userId)
   const findUser = await User.findOne({ _id: userId })
   if (findUser) {
     await savePushToken(findUser, pushToken)
     return res.send({ status: 'Ok' })
   } else {
     return next(error(400, 'Not found'))
+  }
+}
+
+export const sendPushToAllUsersReqeustSchema = Joi.object({
+    message: Joi.string().required(),
+    secret:Joi.string().required()
+})
+export const sendPushToAllUsers = async (req, res, next) => {
+  if(req.body.secret != 'blubblub'){ // KANSKE SKAPA NÅGON HASHAD SECRET,.
+    return next(error(401, 'Unauthorized'))
+  }
+
+  try {
+      const users = await User.find()
+      let tokens = [];
+      users.forEach((user) => {
+          tokens = tokens.concat(user.pushTokens);
+      })
+      sendPushs(tokens,req.body.message);
+      return res.send({status:'Ok'})
+  }catch (err){
+      return next(err)
   }
 }
