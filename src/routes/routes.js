@@ -62,7 +62,7 @@ const routes = router => {
   router.post(
     '/barrunda/participants',
     validator(addUserToBarrundaRequestSchema),
-  //  passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     asyncMiddleware(addUserToBarrunda)
   )
 
