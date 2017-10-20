@@ -11,7 +11,7 @@ import { createAll } from '../helpers/createBarRound'
 
 export const fetchBarrunda = async (req, res, next) => {
   try {
-    const runda = await Barrunda.findOne({})
+    const runda = await Barrunda.findOne({ active: true })
     return res.send(runda)
   } catch (err) {
     return next(err)
@@ -90,6 +90,25 @@ export const fetchBarrundaParticipants = async (req, res, next) => {
       error(500, 'Något gick fel med att hämta deltagare för angiven barrunda')
     )
   }
+}
+
+// Returnerar den aktuella baren under pågående barrunda annars den första baren
+export const fetchCurrentBar = async (req, res, next) => {
+  const barrundaId = req.params.barrundaId
+  let barrunda
+  try {
+    barrunda = await Barrunda.findOne({ _id: barrundaId })
+  } catch (err) {
+    return next(error(400, 'Det finns ingen barrunda med detta ID'))
+  }
+
+  const now = new Date()
+  barrunda.bars.map(bar => {
+    if (now > bar.startTime && now < bar.endTime) {
+      return res.send(bar)
+    }
+  })
+  return res.send(barrunda.bars[0])
 }
 
 // OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB

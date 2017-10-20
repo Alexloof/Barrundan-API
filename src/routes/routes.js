@@ -14,7 +14,8 @@ import {
   addUserToBarrunda,
   fetchBarrundaParticipants,
   createBarrunda,
-  addUserToBarrundaRequestSchema
+  addUserToBarrundaRequestSchema,
+  fetchCurrentBar
 } from '../controllers/barrunda_controller'
 
 /* Använd asyncMiddleware om controllern är async */
@@ -64,14 +65,20 @@ const routes = router => {
   router.post(
     '/barrunda/participants',
     validator(addUserToBarrundaRequestSchema),
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     asyncMiddleware(addUserToBarrunda)
   )
 
   router.get(
     '/barrunda/participants/:barrundaId',
-    //passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', { session: false }),
     asyncMiddleware(fetchBarrundaParticipants)
+  )
+
+  router.get(
+    '/barrunda/bar/:barrundaId',
+    passport.authenticate('jwt', { session: false }),
+    asyncMiddleware(fetchCurrentBar)
   )
 }
 
