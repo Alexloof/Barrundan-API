@@ -6,9 +6,8 @@ import passport from 'passport'
 import config from './config'
 import { jwt_strategy } from './config/jwt'
 import routes from './routes/routes'
-import {startCreateBarrundCronJob} from './cron/createBarrunda'
-import {createPushCronJobs} from './cron/pushJobs'
-
+import { startCreateBarrundCronJob } from './cron/createBarrunda'
+import { createPushCronJobs } from './cron/pushJobs'
 const app = express()
 
 // Add jwt stratergy
@@ -50,7 +49,7 @@ app.use(router)
 
 // Handle Errors
 app.use((err, req, res, next) => {
-  console.log(err.message);
+  console.log(err.message)
   res.status(err.code >= 100 && err.code < 600 ? err.code : 500).send({
     error: err.code >= 100 && err.code < 600 ? err.code : 500,
     message: err.message
@@ -64,6 +63,9 @@ app.use(function(req, res, next) {
   })
 })
 
-//createPushCronJobs();
+
+//createPushCronJobs()
+//startCreateBarrundCronJob()
+
 
 export default app

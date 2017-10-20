@@ -54,10 +54,13 @@ export const savePushToken = async (user, token) => {
       user.pushTokens.push(token)
       await user.save()
     } catch (e) {
-      // Göra något ? eller svälja erroorrt ?!?!
       console.log(e)
     }
   } else {
     console.log('detta token finns redan')
   }
+}
+
+export const sendPushToActiveBarrundanUsers = (message) => {
+
 }
