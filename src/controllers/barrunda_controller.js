@@ -5,22 +5,16 @@ import Barrunda from '../models/barrunda'
 import Barrunda_participant from '../models/barrunda_participant'
 import User from '../models/user'
 import { error } from '../models/error'
+import { getLatestRound } from '../helpers/barRound'
 import Joi from 'joi'
-
-import { createAll } from '../helpers/createBarRound'
 
 export const fetchBarrunda = async (req, res, next) => {
   try {
-    const runda = await Barrunda.findOne({ active: true })
+    const runda = await getLatestRound()
     return res.send(runda)
   } catch (err) {
     return next(err)
   }
-}
-
-export const createBarrunda = async (req, res, next) => {
-  await createAll()
-  res.send({ dinmamma: 'okej' })
 }
 
 // userId & barrundaId params
@@ -54,7 +48,7 @@ export const addUserToBarrunda = async (req, res, next) => {
     return next(error(500, 'Något gick snett'))
   }
   try {
-    const newParticipant = await Barrunda_participant.create({
+    await Barrunda_participant.create({
       userId: userId,
       barrundaId: barrundaId
     })
@@ -109,36 +103,4 @@ export const fetchCurrentBar = async (req, res, next) => {
     }
   })
   return res.send(barrunda.bars[0])
-}
-
-// OBS DENNA ÄR FÖR TEST - SKA REFACTORAS TILL CRONJOB
-export const setBarrunda = async (req, res, next) => {
-  if (!req.body.city) {
-    return res.status(400).send({ error: 'Must provide city' })
-  } else if (req.body.city.toUpperCase() !== 'MALMÖ') {
-    return res.status(400).send({ error: 'staden är inte aktuell för runda!' })
-  }
-  const city = req.body.city
-
-  let data = await fetchBars(city, 1000, 'bar', 'pub')
-  let bars = data.results.map(bar => {
-    return {
-      name: bar.name,
-      rating: bar.rating,
-      address: bar.vicinity,
-      location: bar.geometry.location
-    }
-  })
-
-  const randomBars = pickRandomBars(bars)
-  const newRunda = new Barrunda({
-    city: req.body.city.toUpperCase(),
-    bars: randomBars
-  })
-  newRunda.save((err, runda) => {
-    if (err) {
-      return res.send({ error: err })
-    }
-    res.send({ message: 'success', runda })
-  })
 }

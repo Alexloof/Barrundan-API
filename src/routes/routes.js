@@ -44,6 +44,7 @@ const routes = router => {
     validator(registerForPushReqeustSchema),
     asyncMiddleware(registerForPush)
   )
+
   // Send push to all users
   router.post(
     '/user/sendpush/all',
@@ -52,10 +53,6 @@ const routes = router => {
   )
 
   // Bar routes
-
-  //för att testa göra barrundor
-  router.post('/barrunda', asyncMiddleware(createBarrunda))
-
   router.get(
     '/barrunda',
     passport.authenticate('jwt', { session: false }),

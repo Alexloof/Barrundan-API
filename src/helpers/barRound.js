@@ -2,6 +2,8 @@ import googlePlaces from './googlePlaces'
 import pickRandomBars from './pickRandomBars'
 import { firstAndLastBar } from './sortByDistance'
 import { getRoute } from './google_directions'
+import { getSaturdayDate } from './date'
+
 import Barrunda from '../models/barrunda'
 
 const cities = [
@@ -15,9 +17,8 @@ const cities = [
   }
 ]
 
-// ska bli krön jobb sen
 export const createAll = () => {
-  cities.forEach( async city => {
+  cities.forEach(async city => {
     await createBarRound(city)
   })
 }
@@ -56,14 +57,12 @@ const createBarRound = async city => {
     })
   })
 
-  // Lägg till Datum möget - Kör Kronjobb kl 20:00 på söndag?
-  const now = new Date()
-  const barRoundStartTime = now.setDate(now.getDate() + 6)
+  const barRoundStartTime = getSaturdayDate()
   const barStartTimes = [
-    barRoundStartTime,
-    barRoundStartTime + 3600000,
-    barRoundStartTime + 3600000 * 2,
-    barRoundStartTime + 3600000 * 3
+    barRoundStartTime.setHours(20, 0, 0, 0),
+    barRoundStartTime.setHours(21, 0, 0, 0),
+    barRoundStartTime.setHours(22, 0, 0, 0),
+    barRoundStartTime.setHours(23, 0, 0, 0)
   ]
 
   let finalBarList = []
@@ -78,6 +77,7 @@ const createBarRound = async city => {
 
   const newRunda = new Barrunda({
     city: city.name,
+    startTime: barRoundStartTime.setHours(20, 0, 0, 0),
     bars: finalBarList
   })
 
@@ -87,4 +87,15 @@ const createBarRound = async city => {
     }
     console.log(runda)
   })
+}
+
+export const getLatestRound = async () => {
+  const nowDate = new Date()
+  nowDate.setHours(nowDate.getHours() - 6) // Hur länge ska en runda vara aktiv?
+  try {
+    const barrunda = await Barrunda.findOne({ startTime: { $gt: nowDate } })
+    return barrunda
+  } catch (e) {
+    console.log(e)
+  }
 }

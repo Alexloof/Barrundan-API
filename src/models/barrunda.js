@@ -40,6 +40,9 @@ const BarrundaSchema = new Schema({
     type: Boolean,
     default: true
   },
+  startTime: {
+    type: Date
+  },
   creation_date: {
     type: Date,
     default: Date.now
