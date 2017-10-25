@@ -59,10 +59,10 @@ const createBarRound = async city => {
 
   const barRoundStartTime = getSaturdayDate()
   const barStartTimes = [
-    barRoundStartTime.setHours(20, 0, 0, 0),
-    barRoundStartTime.setHours(21, 0, 0, 0),
-    barRoundStartTime.setHours(22, 0, 0, 0),
-    barRoundStartTime.setHours(23, 0, 0, 0)
+    barRoundStartTime.setHours(13, 0, 0, 0),
+    barRoundStartTime.setHours(14, 0, 0, 0),
+    barRoundStartTime.setHours(15, 0, 0, 0),
+    barRoundStartTime.setHours(16, 0, 0, 0)
   ]
 
   let finalBarList = []
@@ -77,7 +77,7 @@ const createBarRound = async city => {
 
   const newRunda = new Barrunda({
     city: city.name,
-    startTime: barRoundStartTime.setHours(20, 0, 0, 0),
+    startTime: barRoundStartTime.setHours(13, 0, 0, 0),
     bars: finalBarList
   })
 

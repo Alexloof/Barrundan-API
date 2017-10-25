@@ -11,10 +11,10 @@ const secondPushCrontime = '00 55 20 * * 6'
 const thirdPushCrontime = '00 55 21 * * 6'
 const fourthPushCrontime = '00 55 22 * * 6'
 */
-const firstPushCrontime = '00 20 16 * * 5'
-const secondPushCrontime = '00 22 16 * * 5'
-const thirdPushCrontime = '00 24 16 * * 5'
-const fourthPushCrontime = '00 26 16 * * 5'
+const firstPushCrontime = '00 00 13 * * 4'
+const secondPushCrontime = '00 55 13 * * 4'
+const thirdPushCrontime = '00 55 14 * * 4'
+const fourthPushCrontime = '00 55 15 * * 4'
 
 export const sendPush = async message => {
   const barrund = await getLatestRound()
@@ -39,12 +39,16 @@ export const sendPush = async message => {
   }
 }
 
+export const sendPushTest = async message => {
+    sendPushs(['ExponentPushToken[HC3zrYBlUw-hTGhACpDNff]'], message)
+}
+
 export const createPushCronJobs = () => {
   var firstPush = new cron.CronJob({
     cronTime: firstPushCrontime,
     onTick: async () => {
       try {
-        await sendPush('Första baren! Gå dit för fan')
+        await sendPush('Gå till den första baren! Nu börjar äventyret')
       } catch (e) {
         console.log(e)
       }
@@ -57,7 +61,7 @@ export const createPushCronJobs = () => {
     cronTime: secondPushCrontime,
     onTick: async () => {
       try {
-        await sendPush('Andra baren! Gå dit! ')
+        await sendPush('Det är dags för andra baren nu! Skynda dit!')
       } catch (e) {
         console.log(e)
       }
@@ -70,7 +74,7 @@ export const createPushCronJobs = () => {
     cronTime: thirdPushCrontime,
     onTick: async () => {
       try {
-          await sendPush('tredje baren! Gå dit! ')
+          await sendPush('Det är dags för tredje baren nu! Skynda dit')
       } catch (e) {
         console.log(e)
       }
@@ -83,7 +87,7 @@ export const createPushCronJobs = () => {
     cronTime: fourthPushCrontime,
     onTick: async () => {
       try {
-          await sendPush('Sista baren! Hoppas du hittar! ')
+          await sendPush('Sista baren nu! Häng med!')
       } catch (e) {
         console.log(e)
       }
@@ -91,4 +95,17 @@ export const createPushCronJobs = () => {
     timeZone: 'Europe/Stockholm'
   })
   fourthPush.start()
+
+    var test = new cron.CronJob({
+        cronTime: '00 30 17 * * 3',
+        onTick: async () => {
+            try {
+                await sendPushTest('Teeesssta')
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        timeZone: 'Europe/Stockholm'
+    })
+    test.start()
 }
