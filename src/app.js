@@ -64,8 +64,8 @@ app.use(function(req, res, next) {
 })
 
 
-//createPushCronJobs()
-//startCreateBarrundCronJob()
+createPushCronJobs()
+startCreateBarrundCronJob()
 
 
 export default app

@@ -1,7 +1,6 @@
 import passport from 'passport'
 import { validator } from '../helpers/requestValidator'
 import {
-  listAllUsers,
   createUser,
   createUserReqeustSchema,
   registerForPush,
@@ -13,7 +12,6 @@ import {
   fetchBarrunda,
   addUserToBarrunda,
   fetchBarrundaParticipants,
-  createBarrunda,
   addUserToBarrundaRequestSchema,
   fetchCurrentBar
 } from '../controllers/barrunda_controller'
@@ -29,12 +27,6 @@ const routes = router => {
     '/users',
     validator(createUserReqeustSchema),
     asyncMiddleware(createUser)
-  )
-
-  router.get(
-    '/users',
-    passport.authenticate('jwt', { session: false }),
-    asyncMiddleware(listAllUsers)
   )
 
   // Register user for push
