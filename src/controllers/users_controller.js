@@ -10,20 +10,6 @@ import { savePushToken, sendPushs} from '../helpers/push'
 const facebookUrl =
   'https://graph.facebook.com/me?fields=id,first_name,picture&access_token='
 
-export const listAllUsers = async (req, res) => {
-  try {
-    User.find({}, (err, user) => {
-      if (err) {
-        return res.send(err)
-      } else {
-        return res.send(user)
-      }
-    })
-  } catch (e) {
-    return res.send({ error: e })
-  }
-}
-
 // Facebook token.
 export const createUserReqeustSchema = Joi.object({
   token: Joi.string().required()
