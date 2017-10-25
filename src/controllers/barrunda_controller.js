@@ -97,10 +97,15 @@ export const fetchCurrentBar = async (req, res, next) => {
   }
 
   const now = new Date()
+  let returnBar
   barrunda.bars.map(bar => {
     if (now > bar.startTime && now < bar.endTime) {
-      return res.send(bar)
+      returnBar = bar
     }
   })
-  return res.send(barrunda.bars[0])
+
+  if (!returnBar) {
+    returnBar = barrunda.bars[0]
+  }
+  return res.send(returnBar)
 }
