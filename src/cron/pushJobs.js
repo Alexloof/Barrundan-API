@@ -11,10 +11,10 @@ const secondPushCrontime = '00 55 20 * * 6'
 const thirdPushCrontime = '00 55 21 * * 6'
 const fourthPushCrontime = '00 55 22 * * 6'
 */
-const firstPushCrontime = '00 00 13 * * 4'
-const secondPushCrontime = '00 55 13 * * 4'
-const thirdPushCrontime = '00 55 14 * * 4'
-const fourthPushCrontime = '00 55 15 * * 4'
+const firstPushCrontime = '00 00 18 * * 5'
+const secondPushCrontime = '00 00 19 * * 5'
+const thirdPushCrontime = '00 00 20 * * 5'
+const fourthPushCrontime = '00 00 21 * * 5'
 
 export const sendPush = async message => {
   const barrund = await getLatestRound()
@@ -37,10 +37,6 @@ export const sendPush = async message => {
 
     sendPushs(tokens, message)
   }
-}
-
-export const sendPushTest = async message => {
-    sendPushs(['ExponentPushToken[HC3zrYBlUw-hTGhACpDNff]'], message)
 }
 
 export const createPushCronJobs = () => {
@@ -96,16 +92,4 @@ export const createPushCronJobs = () => {
   })
   fourthPush.start()
 
-    var test = new cron.CronJob({
-        cronTime: '00 30 17 * * 3',
-        onTick: async () => {
-            try {
-                await sendPushTest('Teeesssta')
-            } catch (e) {
-                console.log(e)
-            }
-        },
-        timeZone: 'Europe/Stockholm'
-    })
-    test.start()
 }
