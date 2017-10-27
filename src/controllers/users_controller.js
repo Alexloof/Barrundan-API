@@ -57,25 +57,3 @@ export const registerForPush = async (req, res, next) => {
     return next(error(400, 'Not found'))
   }
 }
-
-export const sendPushToAllUsersReqeustSchema = Joi.object({
-    message: Joi.string().required(),
-    secret:Joi.string().required()
-})
-export const sendPushToAllUsers = async (req, res, next) => {
-  if(req.body.secret != 'blubblub'){ // KANSKE SKAPA NÅGON HASHAD SECRET,.
-    return next(error(401, 'Unauthorized'))
-  }
-
-  try {
-      const users = await User.find()
-      let tokens = [];
-      users.forEach((user) => {
-          tokens = tokens.concat(user.pushTokens);
-      })
-      sendPushs(tokens,req.body.message);
-      return res.send({status:'Ok'})
-  }catch (err){
-      return next(err)
-  }
-}
