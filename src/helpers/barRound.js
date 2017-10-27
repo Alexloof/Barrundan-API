@@ -2,7 +2,7 @@ import googlePlaces from './googlePlaces'
 import pickRandomBars from './pickRandomBars'
 import { firstAndLastBar } from './sortByDistance'
 import { getRoute } from './google_directions'
-import { getSaturdayDate } from './date'
+import { getNextDayOfWeek } from './date'
 
 import Barrunda from '../models/barrunda'
 
@@ -57,7 +57,7 @@ const createBarRound = async city => {
     })
   })
 
-  const barRoundStartTime = getSaturdayDate()
+  const barRoundStartTime = getNextDayOfWeek(new Date(), 6)
   const barStartTimes = [
     barRoundStartTime.setHours(13, 0, 0, 0),
     barRoundStartTime.setHours(14, 0, 0, 0),
