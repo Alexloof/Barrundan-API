@@ -2,7 +2,7 @@ import googlePlaces from './googlePlaces'
 import pickRandomBars from './pickRandomBars'
 import { firstAndLastBar } from './sortByDistance'
 import { getRoute } from './google_directions'
-import { getSaturdayDate } from './date'
+import { getNextDayOfWeek } from './date'
 
 import Barrunda from '../models/barrunda'
 
@@ -13,7 +13,8 @@ const cities = [
     radius: 1000,
     type: 'bar',
     keyword: 'pub',
-    numberOfBars: 4
+    numberOfBars: 4,
+    startTime: 18
   }
 ]
 
@@ -57,12 +58,12 @@ const createBarRound = async city => {
     })
   })
 
-  const barRoundStartTime = getSaturdayDate()
+  const barRoundStartTime = getNextDayOfWeek(new Date(), 5)
   const barStartTimes = [
-    barRoundStartTime.setHours(13, 0, 0, 0),
-    barRoundStartTime.setHours(14, 0, 0, 0),
-    barRoundStartTime.setHours(15, 0, 0, 0),
-    barRoundStartTime.setHours(16, 0, 0, 0)
+    barRoundStartTime.setHours(city.startTime, 0, 0, 0),
+    barRoundStartTime.setHours(city.startTime + 1, 0, 0, 0),
+    barRoundStartTime.setHours(city.startTime + 2, 0, 0, 0),
+    barRoundStartTime.setHours(city.startTime + 3, 0, 0, 0)
   ]
 
   let finalBarList = []
@@ -77,7 +78,7 @@ const createBarRound = async city => {
 
   const newRunda = new Barrunda({
     city: city.name,
-    startTime: barRoundStartTime.setHours(13, 0, 0, 0),
+    startTime: barRoundStartTime.setHours(city.startTime, 0, 0, 0),
     bars: finalBarList
   })
 
@@ -91,7 +92,7 @@ const createBarRound = async city => {
 
 export const getLatestRound = async () => {
   const nowDate = new Date()
-  nowDate.setHours(nowDate.getHours() - 6) // Hur länge ska en runda vara aktiv?
+  nowDate.setHours(nowDate.getHours() - 16) // Hur länge ska en runda vara aktiv?
   try {
     const barrunda = await Barrunda.findOne({ startTime: { $gt: nowDate } })
     return barrunda

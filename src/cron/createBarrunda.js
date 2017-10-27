@@ -9,7 +9,7 @@ Months: 0-11
 Day of Week: 0-6*/
 // https://github.com/kelektiv/node-cron
 //const crontime = '00 29 14 * * 5'
-const crontime = '00 30 16 * * 4'
+const crontime = '00 30 21 * * 5'
 
 export const startCreateBarrundCronJob = () => {
   var job = new cron.CronJob({

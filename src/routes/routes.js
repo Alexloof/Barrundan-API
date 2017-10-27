@@ -37,13 +37,6 @@ const routes = router => {
     asyncMiddleware(registerForPush)
   )
 
-  // Send push to all users
-  router.post(
-    '/user/sendpush/all',
-    validator(sendPushToAllUsersReqeustSchema),
-    asyncMiddleware(sendPushToAllUsers)
-  )
-
   // Bar routes
   router.get(
     '/barrunda',
