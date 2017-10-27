@@ -8,6 +8,7 @@ import { jwt_strategy } from './config/jwt'
 import routes from './routes/routes'
 import { startCreateBarrundCronJob } from './cron/createBarrunda'
 import { createPushCronJobs } from './cron/pushJobs'
+import {getNextDayOfWeek} from './helpers/date'
 const app = express()
 
 // Add jwt stratergy
@@ -64,8 +65,8 @@ app.use(function(req, res, next) {
 })
 
 
-createPushCronJobs()
-startCreateBarrundCronJob()
+//createPushCronJobs()
+//startCreateBarrundCronJob()
 
 
 export default app
