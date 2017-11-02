@@ -11,10 +11,10 @@ const secondPushCrontime = '00 55 20 * * 6'
 const thirdPushCrontime = '00 55 21 * * 6'
 const fourthPushCrontime = '00 55 22 * * 6'
 */
-const firstPushCrontime = '00 00 18 * * 5'
-const secondPushCrontime = '00 00 19 * * 5'
-const thirdPushCrontime = '00 00 20 * * 5'
-const fourthPushCrontime = '00 00 21 * * 5'
+const firstPushCrontime = '00 00 20 * * 5'
+const secondPushCrontime = '00 00 21 * * 5'
+const thirdPushCrontime = '00 00 22 * * 5'
+const fourthPushCrontime = '00 00 23 * * 5'
 
 export const sendPush = async message => {
   const barrund = await getLatestRound()
