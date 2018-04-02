@@ -1,4 +1,5 @@
 node_modules/**/*
+src/config/settings.js
 dist/
 test/
 src/config/settings.js
