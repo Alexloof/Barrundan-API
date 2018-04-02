@@ -1,5 +1,6 @@
 node_modules/**/*
 dist/
 test/
+src/config/settings.js
 .idea
 .idea/*
