@@ -1,4 +1,6 @@
+import { DB_URL as db_url, JWT_SECRET as jwt_secret } from './settings'
+
 export default {
-    db_url: 'mongodb://alexfey:barrundan123@ds151544.mlab.com:51544/barrundan-db',
-    jwt_secret: '0tLJ6niJpI6e6mHqZPsPiCjMX1GYcm'
+  db_url,
+  jwt_secret
 }
